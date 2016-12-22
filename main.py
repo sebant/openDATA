@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #pip install twython
 from twython import Twython
 from time import sleep
@@ -13,15 +14,23 @@ twitter = Twython(APP_KEY, access_token=ACCESS_TOKEN)
 #Query---------------------------------------------------------------
 
 def getListOfSearch():
-	return ['putos catalanes']
+	catalunya = ["Catalufo", "Catalunya", "Cataluña", "Catalanes", "Catalan", "Catalufos", "Polaco", "Polacos", "Indepe", "Indepes", "Independentista", "Independentistas", "Charnego", "Xarnego", "Txarnego", "Charnegos", "Xarnegos", "Txarnegos", "Catala", "Catalans", "Independentistes"]
+	puta = ["Puto", "Putos", "Puta", "Putas", "Mierda", "Hijoputa", "Hijos", "Hijo", "Joputa", "Joputas","Agarrados","Mierdas", "Tacaño", "muertos", "muerte", "morid", "mueran", "murais"]
+
+	allPos = []
+	for cat in catalunya:
+		for p in puta:
+			allPos.append(cat + " " + p)
+	return allPos
+
 
 def scrapNTimes(n):
 	t = 0 #Total number of tweet found.
 	for search in getListOfSearch():
+		print "Searching for: ", search
 		for i in range(n):
-			print "-----Try: ", i
 			try:
-				f = open('catalanTw.txt', 'w')
+				f = open(search.replace(" ", "_")+'.txt', 'a')
 				results = twitter.search(count=5000, q=search)
 				for result in results["statuses"]:
 					#if(result["created_at"] < lastdate)break
@@ -30,14 +39,18 @@ def scrapNTimes(n):
 					print "Tweet GOT! Total:", t
 
 					f.write(result["text"].encode('utf-8').strip())
-					f.write(result["created_at"])
+					f.write(" - " + result["created_at"])
 					f.write("\n--------------------------------\n")
 				break
 
 			except:
 				print "Error occured trying"
 				print "Sleeping..."
-				sleep(5)
+				sleep(60*15)
+
+def repeatedTweet(tw, search):
+	f = open('search.txt', 'r')
+	f.readline()
 
 
 scrapNTimes(10)
