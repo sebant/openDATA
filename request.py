@@ -24,8 +24,8 @@ def getLastQueryFileName():
 	return [prevResults,"scrapResults/"+dayLast+"_"+hourLast+".json"]
 
 def getListOfSearch():
-	catalunya = ["Catalufo"]#, "Catalunya", "Cataluña", "Catalanes", "Catalan", "Catalufos", "Polaco", "Polacos", "Indepe", "Indepes", "Independentista", "Independentistas", "Charnego", "Xarnego", "Txarnego", "Charnegos", "Xarnegos", "Txarnegos", "Catala", "Catalans", "Independentistes"]
-	puta = ["Puto", "Putos"]#, "Puta", "Putas", "Mierda", "Hijoputa", "Hijos", "Hijo", "Joputa", "Joputas","Agarrados","Mierdas", "Tacaño", "muertos", "muerte", "morid", "mueran", "murais"]
+	catalunya = ["Catalufo", "Catalunya", "Cataluña", "Catalanes", "Catalan", "Catalufos", "Polaco", "Polacos", "Indepe", "Indepes", "Independentista", "Independentistas", "Charnego", "Xarnego", "Txarnego", "Charnegos", "Xarnegos", "Txarnegos", "Catala", "Catalans", "Independentistes"]
+	puta = ["Puto", "Putos", "Puta", "Putas", "Mierda", "Hijoputa", "Hijos", "Hijo", "Joputa", "Joputas","Agarrados","Mierdas", "Tacaño", "muertos", "muerte", "morid", "mueran", "murais"]
 
 	return [cat+" "+p for cat in catalunya for p in puta]
 
@@ -43,30 +43,36 @@ def connect():
 def scrapNTimes(twitter,n,search,lastResults):
 	#Query---------------------------------------------------------------
 	for i in range(n):
-		#try:
-		results = twitter.search(count=5000, q=search)
-		print "Total number of tweet found: ", len(results["statuses"])
-		
-		if(len(results["statuses"])==0):
-			return [1,results]
-		
-		if "statuses" in lastResults:
-			elements2Delete=[]
-			for result in results["statuses"]:
-				for lastresult in lastResults["statuses"]:
-					if(result["id"]==lastresult["id"]):
-						elements2Delete.append(lastresult)
+		try:
+			results = twitter.search(count=5000, q=search)
+			print search, "\ttotal number of tweet found: ", len(results["statuses"])
 			
-			for element in elements2Delete:
-				lastResults["statuses"].pop(lastResults["statuses"].index(element))
+			if(len(results["statuses"])==0):
+				return [1,results]
 			
-			if(len(lastResults["statuses"])>=100 ):
-				print search, "hem perdut tuits !!!!!!"
-		
-		return [1,results]
+			if "statuses" in lastResults:
+				elements2Delete=[]
+				for result in results["statuses"]:
+					for lastresult in lastResults["statuses"]:
+						if(result["id"]==lastresult["id"]):
+							elements2Delete.append(lastresult)
+				
+				for element in elements2Delete:
+					lastResults["statuses"].pop(lastResults["statuses"].index(element))
+				
+				if(len(lastResults["statuses"])>=100 ):
+					print ""
+					print ""
+					print search, "!!!!!! HEM PERDUT TUITS !!!!!! AUGMENTAR FREQUENCIA"
+					print ""
+					print ""
+					import time
+					time.sleep(10)
 
-		#except:
-		#	return [0,0]
+			return [1,results]
+
+		except:
+			return [0,0]
 
 def main():
 	import time
@@ -83,7 +89,7 @@ def main():
 	#previous search
 	[lastExist, fileNameLast]=getLastQueryFileName()
 	if lastExist:
-		print "Last query is: ", fileNameLast
+		#print "Last query is: ", fileNameLast
 		fL = open(fileNameLast)
 		lastResult=json.load(fL)
 		fL.close()
@@ -95,7 +101,7 @@ def main():
 	
 	dicResults = {}
 	for search in getListOfSearch():
-		print "Searching for: ", search
+		#print "Searching for: ", search
 		#10 nombre dintents que fer per reconectar en cada busqueda
 		[queryDone,results] = scrapNTimes(twitter,10,search,lastResult[search])
 		if queryDone:
@@ -109,7 +115,7 @@ def main():
 				print "ERROR DE CONEXIO ARRETGLAT"
 				dicResults[search]=results
 			else:
-				print "ERROR DE CONEXIO PESISTEIX"
+				print "ERROR DE CONEXIO PERSISTEIX"
 				dicResults[search]={}
 	
 	#nom del fitxer ANY MES DIA_HORA MINUT SEGON
