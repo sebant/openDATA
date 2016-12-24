@@ -93,6 +93,12 @@ def main():
 		fL = open(fileNameLast)
 		lastResult=json.load(fL)
 		fL.close()
+		for search in getListOfSearch():
+			#si en una busqueda no ha trobat algo ho modifiquem la llista de busqueda, q n peti
+			if search not in lastResult:
+				lastResult[search]={}
+
+
 	else:
 		lastResult={}
 		for search in getListOfSearch():
