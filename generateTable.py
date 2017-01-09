@@ -38,6 +38,7 @@ def main():
 					header=list(set(header+tweet.keys()))
 
 	#obrim fitxer csv
+	vIds =[]
 	with codecs.open("tables/test.csv", "w", encoding="utf-8") as csvfile:
 		writer = csv.DictWriter(csvfile, fieldnames=header)
 		writer.writeheader()
@@ -55,7 +56,9 @@ def main():
 				#ja que tots els resultats estan en la seguent busqueda
 				if "statuses" in queryResultJson[query]:
 					for tweet in queryResultJson[query]["statuses"]:
-						writer.writerow(tweet)
-
+						if tweet["id"] not in vIds:
+							writer.writerow(tweet)
+							vIds.append(tweet["id"])
+						
 if __name__ == "__main__":
     main()
