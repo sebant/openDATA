@@ -39,6 +39,7 @@ def main():
 
 	#obrim fitxer csv
 	vIds =[]
+	lJson=[]
 	with codecs.open("tables/test.csv", "w", encoding="utf-8") as csvfile:
 		writer = csv.DictWriter(csvfile, fieldnames=header)
 		writer.writeheader()
@@ -58,7 +59,13 @@ def main():
 					for tweet in queryResultJson[query]["statuses"]:
 						if tweet["id"] not in vIds:
 							writer.writerow(tweet)
+							lJson.append(tweet)
 							vIds.append(tweet["id"])
+
+	import pickle
+	with open("tables/all.bin","wb") as f:
+		pickle.dump(lJson,f)
+
 						
 if __name__ == "__main__":
     main()
