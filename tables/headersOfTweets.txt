@@ -17,7 +17,6 @@ retweet_count
 in_reply_to_user_id
 favorited
 retweeted_status
-user
 geo
 in_reply_to_user_id_str
 possibly_sensitive
@@ -28,3 +27,48 @@ in_reply_to_status_id_str
 place
 extended_entities
 metadata
+
+user{
+	u'follow_request_sent': None
+	 u'has_extended_profile': True
+	 u'profile_use_background_image': True
+	 u'id': 1672895155
+	 u'default_profile': False
+	 u'verified': False
+	 u'profile_text_color': u'333333'
+	 u'profile_image_url_https': u'https://pbs.twimg.com/profile_images/773682683574648832/_mV-iPvW_normal.jpg'
+	 u'profile_sidebar_fill_color': u'DDEEF6'
+	 u'is_translator': False
+	 u'entities': {u'description': {u'urls': []}}
+	 u'followers_count': 698
+	 u'protected': False
+	 u'location': u'Bilbao.'
+	 u'default_profile_image': False
+	 u'id_str': u'1672895155'
+	 u'lang': u'es'
+	 u'utc_offset': 7200
+	 u'statuses_count': 42731
+	 u'description': u'VGC player.'
+	 u'friends_count': 277
+	 u'profile_background_image_url_https': u'https://abs.twimg.com/images/themes/theme1/bg.png'
+	 u'profile_link_color': u'ABB8C2'
+	 u'profile_image_url': u'http://pbs.twimg.com/profile_images/773682683574648832/_mV-iPvW_normal.jpg'
+	 u'notifications': None
+	 u'geo_enabled': True
+	 u'profile_background_color': u'C0DEED'
+	 u'profile_banner_url': u'https://pbs.twimg.com/profile_banners/1672895155/1473749695'
+	 u'profile_background_image_url': u'http://abs.twimg.com/images/themes/theme1/bg.png'
+	 u'name': u'Sandor VGC'
+	 u'is_translation_enabled': False
+	 u'profile_background_tile': False
+	 u'favourites_count': 1703
+	 u'screen_name': u'Gepetroll'
+	 u'url': None
+	 u'created_at': u'Thu Aug 15 10:41:21 +0000 2013'
+	 u'contributors_enabled': False
+	 u'time_zone': u'Athens'
+	 u'profile_sidebar_border_color': u'C0DEED'
+	 u'translator_type': u'regular'
+	 u'following': None
+	 u'listed_count': 16
+}
