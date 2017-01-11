@@ -20,16 +20,21 @@ def main():
 
 	#agrupem per dies
 	vTxD=[]
+	vTxDp=[]
 	vD=[]
 	actualDay = slTweets[0]["created_at"].tm_mday
 	numToday = 0
+	ponToday = 0
 	for tweet in slTweets:
 		if tweet["created_at"].tm_mday == actualDay:
 			numToday=numToday+1
+			ponToday=ponToday+tweet["user"]["followers_count"]
 		else:
 			vTxD.append(numToday)
+			vTxDp.append(ponToday)
 			vD.append(actualDay)
 			numToday=1
+			ponToday=tweet["user"]["followers_count"]
 			actualDay=tweet["created_at"].tm_mday 
 
 
@@ -51,9 +56,18 @@ def main():
 	ax.set_xticks(ind + width)
 	ax.set_xticklabels(vD)
 
+	plt.savefig('plots/timeEvolution.png')
 	
-	plt.savefig('plots/foo.png')
+	fig, ax = plt.subplots()
+	rects1 = ax.bar(ind, vTxDp, width, color='r')
 
+	# add some text for labels, title and axes ticks
+	ax.set_ylabel('#TweetsPon')
+	ax.set_title('Day')
+	ax.set_xticks(ind + width)
+	ax.set_xticklabels(vD)
+	
+	plt.savefig('plots/timeEvolutionPondered.png')
 
 
 if __name__ == "__main__":
