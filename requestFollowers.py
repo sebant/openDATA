@@ -12,59 +12,72 @@ def connect():
 
 	return twitter
 
-def getListUsersIds():
+def load(filename,retdef):
 	import os
-	filename = "tables/usersIds.bin"
+	import pickle
+	
 	if(not os.path.isfile(filename)):
 		print "File "+filename+ " does not exist"
-		return []
+		return retdef
 
-	import pickle
 	with open(filename, "rb") as binFile:
 		return pickle.load(binFile)
 
-	
-
-def scrap(twitter, listUsersIds):
+def scrap(twitter, listUsersIds, dict2Ret,fileout):
 	#Query---------------------------------------------------------------
-	dict2Ret = {}
+	import time
+	import pickle
+					
 	for userId in listUsersIds:
 		print userId
-
-		try:
-			dict2Ret[str(userId)] = twitter.get_followers_ids(user_id = userId)
-		except:
-			print "Conexio perduda wait 16 minuts "
-			import time
-			time.sleep(60*60*16)
-			print "Tornemi"
+		i=0
+		while(str(userId) not in dict2Ret):
+			i+=1
+			print str(userId) + " try: " + str(i)
 			try:
 				dict2Ret[str(userId)] = twitter.get_followers_ids(user_id = userId)
 			except:
-				print "no hi ha manera"
-				return [0,dict2Ret]
+				#GUARDEM
+				save(fileout,dict2Ret)
+				
+				print "Conexio perduda wait 15 minuts "
+				time.sleep(60*15+1)
+				print "Tornemi"
+
 	return [1,dict2Ret]
 
-def main():
-	import time
-	import os
-	import json
+def save(filename,data):
+	import pickle
+	with open(filename,"wb") as f:
+		pickle.dump(data,f)
 	
+def main():
+	import os
+	
+	fileout = "scrapFollResults/followsConexions.bin"
+	filein = fileout
+	fileListIdsIn = "tables/usersIds.bin"
+
 	#creem la carpeta scrapResults si no existeix
 	if(not os.path.exists("scrapFollResults")):
 		os.makedirs("scrapFollResults")
 	
 	#llegim llista
-	lUsersIds = getListUsersIds()	
+	lUsersIds = load(fileListIdsIn,[])	
+
+	#carregeuem els que ja tenim
+	dic2res =load(filein,{})
 
 	#conectem
 	twitter = connect()
-	[allDone,dic2res] = scrap(twitter,[lUsersIds[0]])
+	
+	dic2res = scrap(twitter,lUsersIds,dic2res,fileout)
 	
 	#guardem
-	import pickle
-	with open("scrapFollResults/followsConexions.json","wb") as f:
-		pickle.dump(dic2res,f)
-		
+	save(fileout,dic2res)
+	
+	for i in range(10)
+		print "!!!!!!!!!!!!!!!!FINISH!!!!!!!!!!!!!!!!!!"
+
 if __name__ == "__main__":
     main()

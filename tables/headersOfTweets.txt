@@ -27,7 +27,6 @@ in_reply_to_status_id_str
 place
 extended_entities
 metadata
-
 user{
 	u'follow_request_sent': None
 	 u'has_extended_profile': True
