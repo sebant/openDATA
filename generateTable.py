@@ -7,6 +7,12 @@ def getAllQueryFileName():
 
 
 
+def getListOfSearch():
+	catalunya = ["Catalufo", "Catalunya", "Cataluña", "Catalanes", "Catalan", "Catalufos", "Indepe", "Indepes", "Independentista", "Independentistas","Catala", "Catalans", "Independentistes"]
+	puta = ["Puto", "Putos", "Puta", "Putas", "Mierda", "Hijoputa", "Hijos", "Hijo", "Joputa", "Joputas","Agarrados","Mierdas", "Tacaño", "muertos", "muerte", "morid", "mueran", "murais"]
+
+	return [cat+" "+p for cat in catalunya for p in puta]
+
 def main():
 	import time
 	import os
@@ -41,6 +47,7 @@ def main():
 	vIds =[]
 	lJson=[]
 	vIdsUsers=[]
+	vQueris = getListOfSearch()
 	with codecs.open("tables/test.csv", "w", encoding="utf-8") as csvfile:
 		writer = csv.DictWriter(csvfile, fieldnames=header)
 		writer.writeheader()
@@ -54,16 +61,17 @@ def main():
 
 			#per cada busqueda
 			for query in queryResultJson:
-				#si no te statuses es pq li hem tret al request.py 
-				#ja que tots els resultats estan en la seguent busqueda
-				if "statuses" in queryResultJson[query]:
-					for tweet in queryResultJson[query]["statuses"]:
-						if tweet["id"] not in vIds:
-							writer.writerow(tweet)
-							lJson.append(tweet)
-							vIds.append(tweet["id"])
-							if tweet["user"]["id"] not in vIdsUsers:
-								vIdsUsers.append(tweet["user"]["id"])
+				if query in vQueris:
+					#si no te statuses es pq li hem tret al request.py 
+					#ja que tots els resultats estan en la seguent busqueda
+					if "statuses" in queryResultJson[query]:
+						for tweet in queryResultJson[query]["statuses"]:
+							if tweet["id"] not in vIds:
+								writer.writerow(tweet)
+								lJson.append(tweet)
+								vIds.append(tweet["id"])
+								if tweet["user"]["id"] not in vIdsUsers:
+									vIdsUsers.append(tweet["user"]["id"])
 
 	import pickle
 	with open("tables/all.bin","wb") as f:
